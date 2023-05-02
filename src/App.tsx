@@ -8,7 +8,7 @@ function App() {
     <>
         <BrowserRouter>
             <NavBar />
-            <hr/>
+
             <div className="page">
                 <Routes>
                     <Route path="shop" element={<ShopPage />} />
