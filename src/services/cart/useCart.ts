@@ -17,12 +17,7 @@ export const useCart = create((set, get) =>({
        const found = get().list.find(item => item.product.id === product.id);
 
        if(found){
-           found.quantity++;
-           set(state => ({
-               list: state.list.map(item => {
-                   return item.product.id === found.product.id ? found : item;
-               })
-           }))
+          get().increaseQty(product.id)
        }else{
            const item: CartItem = {product, quantity: 1}
            set({ list: [...get().list, item] });
@@ -30,13 +25,38 @@ export const useCart = create((set, get) =>({
 
     },
     removeFromCart: (productId: string) => {
-
+       set(state => ({
+           list: state.list.filter(item => item.product.id !== productId)
+       }))
     },
     increaseQty: (productId: string) => {
+        const found = get().list.find(item => item.product.id === productId);
 
+        if(found){
+            found.quantity++;
+            set(state => ({
+                list: state.list.map(item =>{
+                    return item.product.id === found.product.id ? found : item;
+                })
+            }))
+        }
     },
     decreaseQty: (productId: string) => {
+        const found = get().list.find(item => item.product.id === productId);
 
+        if(found){
+            if(found.quantity > 1){
+                found.quantity--;
+            }else{
+                get().removeFromCart(productId);
+            }
+
+            set(state => ({
+                list: state.list.map(item =>{
+                    return item.product.id === found.product.id ? found : item;
+                })
+            }))
+        }
     },
     clearCart: () => {
 
