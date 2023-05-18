@@ -1,6 +1,7 @@
 import {CartItem} from "../../model/cart-item";
 import {Product} from "../../model/product";
 import {create} from "zustand";
+import {list} from "postcss";
 
 export interface CartState {
     list: CartItem[];
@@ -59,6 +60,6 @@ export const useCart = create((set, get) =>({
         }
     },
     clearCart: () => {
-
+        set({ list: [] });
     },
 }))

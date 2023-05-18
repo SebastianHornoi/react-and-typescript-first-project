@@ -1,8 +1,13 @@
+import {NavLink} from "react-router-dom";
+
 export function ThanksPage(){
     return(
         <div>
-            <h1 className="title">Thank you</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident, quod.</p>
+            <div className="text-3xl text-center">Thank you your order</div>
+
+            <div className="flex justify-center mt-12">
+                <NavLink to="/catalog" className="btn primary">Back to Shop</NavLink>
+            </div>
         </div>
     )
 }

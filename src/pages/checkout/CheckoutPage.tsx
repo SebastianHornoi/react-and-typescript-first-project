@@ -1,29 +1,13 @@
 import clsx from 'clsx';
-import {selectorTotalCartCost, useCart} from "../../services/cart";
-import {ChangeEvent, useState} from "react";
+import {useCheckout} from "./hooks/useCheckout";
 
-export const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 
 export function CheckoutPage(){
-    const [user, setUser] = useState({ name: '', email: ''})
-    const [dirty, setDirty] = useState(false);
-    const totalCartCost = useCart(selectorTotalCartCost);
-
-    function changeHandler(e: ChangeEvent<HTMLInputElement>) {
-        const name = e.currentTarget.name;
-        const value = e.currentTarget.value;
-        setUser(state => ({ ...state, [name]: value }))
-        setDirty(true);
-    }
-
-    function sendOrder(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault()
-        console.log(user)
-    }
-
-    const isNameValid = user.name.length;
-    const isEmailValid = user.email.match(EMAIL_REGEX);
-    const isValid = isNameValid && isEmailValid;
+    const {
+        validators, actions,
+        user, dirty, totalCartCost
+    } = useCheckout();
 
     return(
         <div className="max-w-sm mx-auto">
@@ -31,14 +15,14 @@ export function CheckoutPage(){
 
             <div className="text-xl my-3 border-b">€ {totalCartCost}</div>
 
-            <form className="flex flex-col gap-3" onSubmit={sendOrder}>
+            <form className="flex flex-col gap-3" onSubmit={actions.sendOrder}>
                 Your name:
                 <input
                     type="text" placeholder="your name"
                     name="name"
                     value={user.name}
-                    onChange={changeHandler}
-                    className={clsx({ 'error': !isNameValid && dirty})}
+                    onChange={actions.changeHandler}
+                    className={clsx({ 'error': !validators.isNameValid && dirty})}
                 />
 
                 Your email
@@ -46,11 +30,11 @@ export function CheckoutPage(){
                     type="email" placeholder="Your email"
                     name="email"
                     value={user.email}
-                    onChange={changeHandler}
-                    className={clsx({ 'error': !isEmailValid && dirty })}
+                    onChange={actions.changeHandler}
+                    className={clsx({ 'error': !validators.isEmailValid && dirty })}
                 />
 
-                <button type="submit" className="btn primary" disabled={!isValid}>
+                <button type="submit"  className={clsx('btn', {primary: !validators.isValid, 'success': validators.isValid})} disabled={!validators.isValid}>
                     CONFIRM ORDER
                 </button>
             </form>
