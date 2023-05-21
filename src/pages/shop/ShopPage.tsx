@@ -1,6 +1,6 @@
 import {Product} from "../../model/Product";
 import {useEffect, useState} from "react";
-import {pb} from "../../pocketbas";
+import {pb} from "../../pocketbase";
 import {ProductCard} from "./components/ProductCard";
 import {ServerError, Spinner} from "../../shared";
 import {useCart, useCartPanel} from "../../services/cart";
